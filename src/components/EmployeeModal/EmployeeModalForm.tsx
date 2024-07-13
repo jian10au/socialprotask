@@ -1,7 +1,7 @@
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { Grid, TextField, Button } from "@mui/material";
-import { EmployeeLineItem } from "../../interfaces/employees";
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { Grid, TextField, Button, Typography } from '@mui/material';
+import { EmployeeLineItem } from '../../interfaces/employees';
 
 interface EmployeeFormProps {
   loading: boolean;
@@ -14,12 +14,21 @@ export const EmployeeForm = ({
   employee,
   handleSubmit,
 }: EmployeeFormProps) => {
+  // a. consider move this validation schema into its own file for better organization
   const validationSchema = yup.object({
     name: yup.string().required(),
-    email: yup.string().required(),
-    phone: yup.date().required(),
+    // b. consider create custom validator to check if email or phone number is already existent
+    email: yup.string().email().required(),
+    phone: yup
+      .number()
+      .typeError('phone number must be a whole number')
+      .positive()
+      .integer('phone must be a whole number')
+      .required(),
     occupation: yup.string().required(),
   });
+
+  // c. we can destructure the formik object to simply access to its keys
   const formik = useFormik({
     initialValues: {
       name: employee.name,
@@ -35,60 +44,63 @@ export const EmployeeForm = ({
         name: values.name,
         email: values.email,
         phone: values.phone,
+        occupation: values.occupation,
       });
     },
   });
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Grid container spacing={3}>
-        <Grid item xs={6} sm={6}>
+      <Typography variant='h5'>Employee Form</Typography>
+      <Grid container spacing={3} mt={1}>
+        {/* d. consider having a field config varibale such as array of object and loop through that to avoid repetition */}
+        <Grid item xs={12} sm={6}>
           <TextField
-            id="name"
-            name="name"
-            label="Name"
+            id='name'
+            name='name'
+            label='Name'
             fullWidth
             disabled={loading}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.name}
             error={formik.touched.name && Boolean(formik.errors.name)}
-            helperText={formik.touched.name ? formik.errors.name : ""}
+            helperText={formik.touched.name ? formik.errors.name : ''}
           />
         </Grid>
-        <Grid item xs={6} sm={6}>
+        <Grid item xs={12} sm={6}>
           <TextField
-            id="emailAddress"
-            name="emailAddress"
-            label="email"
+            id='email'
+            name='email'
+            label='Email'
             fullWidth
             disabled={loading}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.email}
             error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email ? formik.errors.email : ""}
+            helperText={formik.touched.email ? formik.errors.email : ''}
           />
         </Grid>
-        <Grid item xs={6} sm={6}>
+        <Grid item xs={12} sm={6}>
           <TextField
-            id="phone"
-            name="phone"
-            label="phone"
+            id='phone'
+            name='phone'
+            label='Phone'
             fullWidth
             disabled={loading}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.phone}
             error={formik.touched.phone && Boolean(formik.errors.phone)}
-            helperText={formik.touched.phone ? formik.errors.phone : ""}
+            helperText={formik.touched.phone ? formik.errors.phone : ''}
           />
         </Grid>
-        <Grid item xs={6} sm={6}>
+        <Grid item xs={12} sm={6}>
           <TextField
-            id="occupation"
-            name="occupation"
-            label="occupation"
+            id='occupation'
+            name='occupation'
+            label='Occupation'
             fullWidth
             disabled={loading}
             onChange={formik.handleChange}
@@ -98,7 +110,7 @@ export const EmployeeForm = ({
               formik.touched.occupation && Boolean(formik.errors.occupation)
             }
             helperText={
-              formik.touched.occupation ? formik.errors.occupation : ""
+              formik.touched.occupation ? formik.errors.occupation : ''
             }
           />
         </Grid>
@@ -108,11 +120,15 @@ export const EmployeeForm = ({
           xs={12}
           sm={12}
           sx={{
-            display: "flex !important",
-            justifyContent: "right !important;",
+            display: 'flex !important',
+            justifyContent: 'right !important;',
           }}
         >
-          <Button type="submit" disabled={formik.isSubmitting || loading}>
+          <Button
+            type='submit'
+            variant='contained'
+            disabled={formik.isSubmitting || loading}
+          >
             Save
           </Button>
         </Grid>

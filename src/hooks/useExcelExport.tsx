@@ -1,12 +1,13 @@
-import * as React from "react";
-import { EmployeeLineItem } from "../interfaces/employees";
-import { sleep } from "../utils/sleep";
-import { writeEmployeesToExcel } from "../utils/excel";
+import * as React from 'react';
+import { EmployeeLineItem } from '../interfaces/employees';
+import { sleep } from '../utils/sleep';
+import { writeEmployeesToExcel } from '../utils/excel';
 
 export const useExcelExport = () => {
   const [isExporting, setIsExporting] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
 
+  // consider wrap useCallback for exportExployee functions
   const exportExployees = async (
     employees: EmployeeLineItem[]
   ): Promise<void> => {
@@ -16,7 +17,7 @@ export const useExcelExport = () => {
       await sleep(2000);
       return;
     } catch (e: any) {
-      setError("Could not export employees");
+      setError('Could not export employees');
     } finally {
       setIsExporting(false);
     }

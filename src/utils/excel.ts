@@ -4,18 +4,20 @@ import * as ExcelJs from "exceljs";
 export const writeEmployeesToExcel = async (
   employees: EmployeeLineItem[]
 ): Promise<boolean> => {
+
+  // harded coded values such as column names, rownames, blob types and file names can be extracted and store in a separate file 
   return new Promise((resolve, reject) => {
     (async () => {
       try {
         const workbook = new ExcelJs.Workbook();
         const workSheet = workbook.addWorksheet("Employees");
-        workSheet.columns = ["id", "name", "phone", "occuplaystation"];
-        workSheet.addRow(["id", "name", "phone", "occuplaystation"]);
+        workSheet.columns = ["id", "name","email", "phone", "occupation"];
+        workSheet.addRow(["id", "name","email", "phone", "occupation"]);
         for (const employee of employees) {
           workSheet.addRow([
             employee.id,
             employee.name,
-            employee.phone,
+            employee.email,
             employee.phone,
             employee.occupation,
           ]);

@@ -1,16 +1,9 @@
-import {
-  Grid,
-  Table,
-  TableBody,
-  TableRow,
-  TableHead,
-  TableCell,
-  Typography,
-} from "@mui/material";
-import { EmployeeTableRow } from "./EmployeeTableRow";
-import { EmployeeTableRowSkeleton } from "./EmployeeTableRowSkeleton";
-import { NoRows } from "./NoRows";
-import { EmployeeLineItem } from "../../interfaces/employees";
+import { Table, TableBody, TableContainer, Paper } from '@mui/material';
+import { EmployeeTableRow } from './EmployeeTableRow';
+import { EmployeeTableRowSkeleton } from './EmployeeTableRowSkeleton';
+import { NoRows } from './NoRows';
+import { EmployeeLineItem } from '../../interfaces/employees';
+import { EmployeeTableHeader } from './EmployeeTableHeader';
 
 interface EmployeeTableProps {
   loading: boolean;
@@ -24,46 +17,26 @@ export const EmployeeTable = ({
   handleEditEmployee,
 }: EmployeeTableProps) => {
   return (
-    <Grid item xs={12} md={12}>
+    <TableContainer component={Paper}>
       <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              <Typography>Name</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography>Email</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography>Phone</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography>Occupation</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography>Actions</Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
+        <EmployeeTableHeader />
         <TableBody>
           {loading
-            ? Array.from({ length: 10 }, (_, index) => (
-                <EmployeeTableRowSkeleton />
+            ? Array.from({ length: employees.length + 1 }, (_, index) => (
+                <EmployeeTableRowSkeleton key={index} />
               ))
             : employees?.map((row) => {
                 return (
                   <EmployeeTableRow
+                    key={row.id}
                     employee={row}
                     handleEditEmployee={handleEditEmployee}
                   />
                 );
               })}
-
-          {!loading && !employees.length ? (
-            <NoRows title={"Employees"} />
-          ) : null}
+          {!loading && !employees.length && <NoRows title={'Employees'} />}
         </TableBody>
       </Table>
-    </Grid>
+    </TableContainer>
   );
 };

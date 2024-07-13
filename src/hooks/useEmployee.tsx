@@ -1,6 +1,6 @@
-import * as React from "react";
-import { EmployeeLineItem } from "../interfaces/employees";
-import { sleep } from "../utils/sleep";
+import * as React from 'react';
+import { EmployeeLineItem } from '../interfaces/employees';
+import { sleep } from '../utils/sleep';
 
 export const useEmployee = () => {
   const [employees, setEmployees] = React.useState<EmployeeLineItem[]>([]);
@@ -13,19 +13,21 @@ export const useEmployee = () => {
       await sleep(2000);
       setEmployees([] as EmployeeLineItem[]);
     } catch (e: any) {
-      setError("Could not list employees");
+      setError('Could not list employees');
     } finally {
       setIsLoading(false);
     }
   };
 
+  // consider wrapping the function createEmployee and updateEmployee in a useCallback function
+  // see react doc https://react.dev/reference/react/useCallback#optimizing-a-custom-hook
   const createEmployee = async (employee: EmployeeLineItem): Promise<void> => {
     try {
       setIsLoading(true);
       await sleep(2000);
       setEmployees([...employees, { ...employee }]);
     } catch (e: any) {
-      setError("Could not create employee");
+      setError('Could not create employee');
     } finally {
       setIsLoading(false);
     }
@@ -35,9 +37,11 @@ export const useEmployee = () => {
     try {
       setIsLoading(true);
       await sleep(2000);
-      setEmployees([...employees]);
+      setEmployees((prevEmployees) =>
+        prevEmployees.map((empl) => (empl.id === employee.id ? employee : empl))
+      );
     } catch (e: any) {
-      setError("Could not update employee");
+      setError('Could not update employee');
     } finally {
       setIsLoading(false);
     }

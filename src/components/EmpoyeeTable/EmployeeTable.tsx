@@ -16,13 +16,14 @@ export const EmployeeTable = ({
   employees,
   handleEditEmployee,
 }: EmployeeTableProps) => {
+  const skeletonCount = employees.length > 0 ? employees.length : 1;
   return (
     <TableContainer component={Paper}>
       <Table>
         <EmployeeTableHeader />
         <TableBody>
           {loading
-            ? Array.from({ length: employees.length + 1 }, (_, index) => (
+            ? Array.from({ length: skeletonCount }, (_, index) => (
                 <EmployeeTableRowSkeleton key={index} />
               ))
             : employees?.map((row) => {

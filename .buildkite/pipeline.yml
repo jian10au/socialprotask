@@ -1,4 +1,3 @@
 steps:
   - label: ":hammer: Example Script"
-    command: 
-      echo "ABC"
+    commands: "script.sh"

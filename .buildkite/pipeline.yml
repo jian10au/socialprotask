@@ -2,3 +2,5 @@ steps:
 # why it does not work
   - label: ":hammer: Example Script"
     command: "script.sh"
+env:
+  BUILDKITE_AGENT_DEBUG: "true"

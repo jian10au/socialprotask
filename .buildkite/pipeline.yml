@@ -1,6 +1,16 @@
 steps:
 # why it does not work
   - label: ":hammer: Example Script"
-    command: "script.sh"
+    command: |
+      set -eo pipefail
+      echo "--- :package: Build job checkout directory"
+      pwd
+      ls -la
+
+      echo "--- :evergreen_tree: Build job environment"
+      env
+
+      echo "+++ :hammer: Example tests"
+      echo -e "Brian is smart and success my friend"
 env:
   BUILDKITE_AGENT_DEBUG: "true"
